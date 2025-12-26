@@ -1,4 +1,4 @@
-# (OverTheWire Bandit Writeup)[https://overthewire.org/wargames/bandit/]
+#  <a href="https://overthewire.org/wargames/bandit/">OverTheWire Bandit Writeup</a>
 
 *Writeups on the first problems are short since I already have experience with the basic command line.*
 
