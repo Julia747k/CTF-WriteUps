@@ -344,6 +344,9 @@ strings data.txt | grep -w "======"
 
 **Problem description:** 
 
+>The password for the next level is stored in the file data.txt, which contains base64 encoded data
+
+
 **Solution:**  
 Like the problem states, the content of data.txt is encrypted in **Base64**.
 We can decode it using the **base64** command with the **-d (decode)** flag:
