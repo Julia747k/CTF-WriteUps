@@ -480,22 +480,30 @@ the file using cat to get the password.
 
 **Solution:**  
 
-To log in with the ssh key we have to use the -i flag and the sshkey.private key, 
-since the bandit container dosnt allow logging in from one container into another, 
-we have to copy the ssh key into our own system, when thats done I can run: 
+To log in using the provided SSH private key, we need to use the -i flag with ssh.
+Since the key exists inside the Bandit level environment, it must be copied to our 
+local machine before it can be used.
+Once the key is available locally, we can attempt to log in using:
 
 ```bash
 ssh -i sshkey.private -p 2220 bandit14@bandit.labs.overthewire.org
 ```
-But I got a " WARNING: UNPROTECTED PRIVATE KEY FILE! ", this can be fixing by only
-giving persmission to the owner, also changing persmission to 600: 
+
+At first, this results in the following warning:
+
+```bash
+WARNING: UNPROTECTED PRIVATE KEY FILE! 
+```  
+
+SSH requires private keys to be readable only by the owner for security reasons.
+This can be fixed by restricting the file permissions: 
 
 ```bash 
 chmod 600 sshkey.private
 ```
-
-Now when we run the first command again we get logged into the bandit14 container.
-From here we just have to read the /etc/bandit_pass/bandit14 file: 
+After correcting the permissions, running the SSH command again successfully 
+logs us into the bandit14 account.
+Once logged in, the password for the next level can be read from:
 
 ```bash
 cat /etc/bandit_pass/bandit14
