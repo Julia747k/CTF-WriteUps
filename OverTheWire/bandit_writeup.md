@@ -137,7 +137,9 @@ We can see that **file07** is **ASCII text**, so we check it with:
 We have to find an **ASCII file** that is **1033** bytes in size and does not have the executable bit.
 We could check every folder manually using **ls -la**, but it is easier to narrow it down by searching 
 for a file with the exact size that is not executable:
+
 `find . -type f -size 1033c ! -executable`  
+
 `cat ./maybehere07/.file2`
 
 <details>
