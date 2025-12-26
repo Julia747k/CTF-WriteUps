@@ -14,7 +14,9 @@ The solution to this problem is logging into the game using SSH on port **2220**
 username **bandit0**. This is the first stepping stone to completing the rest of the problems.
 
 **Command used:**  
-`ssh -p 2220 bandit0@bandit.labs.overthewire.org`
+```bash
+ssh -p 2220 bandit0@bandit.labs.overthewire.org
+```
 
 ---
 
