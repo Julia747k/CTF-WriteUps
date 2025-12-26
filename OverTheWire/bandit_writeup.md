@@ -468,3 +468,67 @@ the file using cat to get the password.
 
 
 --- 
+
+## Level 14
+
+**Problem description:** 
+
+>The password for the next level is stored in /etc/bandit_pass/bandit14 and can only be read by user bandit14. 
+>For this level, you don’t get the next password, but you get a private SSH key that can be used 
+>to log into the next level. Look at the commands that logged you into previous bandit levels, and find out how to use 
+>the key for this level.
+
+**Solution:**  
+
+To log in with the ssh key we have to use the -i flag and the sshkey.private key, 
+since the bandit container dosnt allow logging in from one container into another, 
+we have to copy the ssh key into our own system, when thats done I can run: 
+
+```bash
+ssh -i sshkey.private -p 2220 bandit14@bandit.labs.overthewire.org
+```
+But I got a " WARNING: UNPROTECTED PRIVATE KEY FILE! ", this can be fixing by only
+giving persmission to the owner, also changing persmission to 600: 
+
+```bash 
+chmod 600 sshkey.private
+```
+
+Now when we run the first command again we get logged into the bandit14 container.
+From here we just have to read the /etc/bandit_pass/bandit14 file: 
+
+```bash
+cat /etc/bandit_pass/bandit14
+```
+<details>
+<summary><strong>🚩 Flag:<strong></summary>
+
+`MU4VWeTyJk8ROof1qqmcBPaLh7lDCPvS`
+
+</details> 
+
+
+--- 
+
+
+## Level 15
+
+**Problem description:** 
+
+>The password for the next level can be retrieved by submitting the password of 
+> the current level to port 30000 on localhost.
+
+
+**Solution:**  
+
+
+```bash
+
+```
+
+<details>
+<summary><strong>🚩 Flag:<strong></summary>
+
+``
+
+</details> 
