@@ -42,7 +42,7 @@ cat readme
 ```
 
 <details>
-<summary><strong>🚩Flag:<strong></summary>
+<summary><strong>🚩 Flag:<strong></summary>
 
 `ZjLjTmM6FvvyRnrb2rfNWOZOTa6ip5If`
 
@@ -74,7 +74,7 @@ cat < -
 ```
 
 <details>
-<summary><strong>🚩Flag:<strong></summary>
+<summary><strong>🚩 Flag:<strong></summary>
 
 `263JGJPfgU6LtdEvgfWU1XP5yac29mFx`
 
@@ -99,7 +99,7 @@ cat "./--spaces in this filename--"
 ```
 
 <details>
-<summary><strong>🚩Flag:<strong></summary>
+<summary><strong>🚩 Flag:<strong></summary>
 
 `MNk8KNH3Usiio41PRUEoDFPqfxLPlSmx`
 
@@ -136,7 +136,7 @@ cat ...Hiding-From-You
 
 
 <details>
-<summary><strong>🚩Flag:<strong></summary>
+<summary><strong>🚩 Flag:<strong></summary>
 
 `2WmrDFRmJIq3IPxneAaMGhap0pFhF3NJ`
 
@@ -170,7 +170,7 @@ cat ./-file07
 ```
 
 <details>
-<summary><strong>🚩Flag:<strong></summary>
+<summary><strong>🚩 Flag:<strong></summary>
 
 `4oQYVPkxZOOEOO5pTW81FB8j8lxXGUQw`
 
@@ -201,7 +201,7 @@ cat ./maybehere07/.file2
 ```
 
 <details>
-<summary><strong>🚩Flag:<strong></summary>
+<summary><strong>🚩 Flag:<strong></summary>
 
 `HWasnPhtq9AVKe0dmk45nxy20cvUa6EG`
 
@@ -235,7 +235,7 @@ find /* -type f -size 33c -group bandit6 -user bandit7 2>/dev/null
 ```
 
 <details>
-<summary><strong>🚩Flag:<strong></summary>
+<summary><strong>🚩 Flag:<strong></summary>
 
 `morbNTDkSW6jIlUc0ymOdMaLnOlFVAaj`
 
@@ -268,7 +268,7 @@ grep "millionth" data.txt
 
 
 <details>
-<summary><strong>🚩Flag:<strong></summary>
+<summary><strong>🚩 Flag:<strong></summary>
 
 `dfwvzFQi4mU0wfNbFOe9RoWskMLg7eEc`
 
@@ -298,7 +298,7 @@ sort data.txt | uniq -u
 
 
 <details>
-<summary><strong>🚩Flag:<strong></summary>
+<summary><strong>🚩 Flag:<strong></summary>
 
 `4CKMh1JI91bUIZZPXDqGanal4xvAg0JM`
 
@@ -331,7 +331,7 @@ strings data.txt | grep -w "======"
 
 
 <details>
-<summary><strong>🚩Flag:<strong></summary>
+<summary><strong>🚩 Flag:<strong></summary>
 
 `FGUW5ilLVJrxX9kMYMmlN4MgbpfMiqey`
 
@@ -356,8 +356,115 @@ base64 -d data.txt
 ```
 
 <details>
-<summary><strong>🚩Flag:<strong></summary>
+<summary><strong>🚩 Flag:<strong></summary>
 
 `dtR173fZKb0RRsDFSGsg2RWnpNVj3qRr`
 
 </details> 
+
+
+--- 
+
+## Level 12
+
+**Problem description:** 
+
+> The password for the next level is stored in the file data.txt, where all lowercase (a-z) 
+> and uppercase (A-Z) letters have been rotated by 13 positions
+
+**Solution:**  
+
+Since it is a ROT13-style shift, we have to shift all the characters by 13 positions.
+This can be solved by using the tr command, which replaces characters with the mapped ones.
+
+```bash
+cat data.txt | tr "A-Za-z" "N-ZA-Mn-za-m"
+```
+
+<details>
+<summary><strong>🚩 Flag:<strong></summary>
+
+`7x16WNeHIi5YkIhWsfFIqoognUTyj9Q4`
+
+</details> 
+
+
+--- 
+
+## Level 13
+
+**Problem description:** 
+
+> The password for the next level is stored in the file data.txt, which is a hexdump of a file 
+> that has been repeatedly compressed. For this level it may be useful to create a directory under 
+> /tmp in which you can work. Use mkdir with a hard to guess directory name. Or better, use the 
+> command “mktemp -d”. Then copy the datafile using cp, and rename it using mv (read the manpages!)
+
+**Solution:** 
+Creating a directory under /tmp: 
+
+```bash
+mktemp -d
+cp data.txt /tmp/<tempdir>
+cd /tmp/<tempdir>
+```
+
+First we reverse the hexdump by using the xxd command with the -r flag to convert it back
+to a normal binary file:
+
+```bash
+xxd -r data.txt > data
+```
+
+Then using `file` command we check the type of file, which shows us that it is a
+gzip compressed file:
+
+```bash
+file data
+```
+
+We can extract it using the gunzip command, but first we have to rename it to data.gz:
+
+```bash
+mv data data.gz
+gunzip data.gz
+```
+
+The file still contains unreadable text, so we check the file type again:
+
+```bash
+file data
+```
+
+The file is compressed with bzip2, so we can decompress it using bunzip2:
+
+```bash
+mv data data.bz2
+bunzip2 data.bz2
+```
+We then have to use gunzip and bunzip2 once more. After that, the file turns out to be a
+POSIX tar archive, which can be extracted with tar -xf:
+
+```bash 
+mv data data.tar
+tar -xf data.tar
+```
+We now get a data5.bin file that is still a POSIX tar archive, so we extract it again:
+
+```bash
+tar -xf data5.bin
+```
+
+This gives us a data6.bin file. By checking it with the file command, we see that it is
+compressed again, so we have to use bunzip2 and gunzip one more time. Finally we can read
+the file using cat to get the password.
+
+<details>
+<summary><strong>🚩 Flag:<strong></summary>
+
+`FO5dwFsc0cbaIiH0h8J2eUks2vdTDwAn`
+
+</details> 
+
+
+--- 
