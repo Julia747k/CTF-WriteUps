@@ -1,14 +1,16 @@
-# OverTheWire Bandit Writeup 
+# (OverTheWire Bandit Writeup)[https://overthewire.org/wargames/bandit/]
 
-> *Writeups on the first problems are short since I already have experience with the basic command line.*
+*Writeups on the first problems are short since I already have experience with the basic command line.*
 
 ---
 
 ## Level 0
 
 **Problem description:**  
-Log into the game using SSH.
-![alt text](https://github.com/Julia747k/CTF-WriteUps/tree/main/OverTheWire/Bpic/Level0.png "Level 0")
+
+> The goal of this level is for you to log into the game using SSH. The host to which you need to connect 
+is bandit.labs.overthewire.org, on port 2220. The username is bandit0 and the password is bandit0. Once 
+logged in, go to the Level 1 page to find out how to beat Level 1.
 
 **Solution:**  
 The solution to this problem is logging into the game using SSH on port **2220** with the 
@@ -25,7 +27,12 @@ ssh -p 2220 bandit0@bandit.labs.overthewire.org
 ## Level 0 → Level 1
 
 **Problem description:**  
-Find the password stored in a file.
+
+>The password for the next level is stored in a file called readme located in the home directory. 
+>Use this password to log into bandit1 using SSH. Whenever you find a password for a level, 
+>use SSH (on port 2220) to log into that level and continue the game.
+
+
 
 **Solution:**  
 We are told that there is a **readme** file in the home directory that contains the password.
@@ -45,6 +52,11 @@ cat readme
 ---
 
 ## Level 2
+
+**Problem description:**  
+
+> The password for the next level is stored in a file called - located in the home directory
+
 
 **Solution:**  
 In Unix, **-** means “read from stdin instead of a file,” so **cat -** will not try to open 
@@ -73,6 +85,11 @@ cat < -
 
 ## Level 3
 
+**Problem description:** 
+
+> The password for the next level is stored in a file called --spaces in this filename-- 
+> located in the home directory
+
 **Solution:**  
 This problem builds on the last one but adds spaces in the filename.
 To open a file with spaces in its name, we can use quotes around the filename:
@@ -91,6 +108,10 @@ cat "./--spaces in this filename--"
 ---
 
 ## Level 4
+
+**Problem description:** 
+
+> The password for the next level is stored in a hidden file in the inhere directory.
 
 **Solution:** 
 First, I used “cd inhere” to go into the inhere directory.
@@ -126,6 +147,11 @@ cat ...Hiding-From-You
 
 ## Level 5
 
+**Problem description:** 
+
+> The password for the next level is stored in the only human-readable file in the inhere directory. 
+> Tip: if your terminal is messed up, try the “reset” command.
+
 **Solution:**  
 The problem says the flag is in the only human-readable file in the inhere directory.
 First, we go into the directory:
@@ -155,6 +181,15 @@ cat ./-file07
 
 ## Level 6
 
+**Problem description:** 
+
+> *he password for the next level is stored in a file somewhere under the inhere directory 
+> and has all of the following properties:
+>
+>   human-readable
+>   1033 bytes in size
+>   not executable
+
 **Solution:**  
 We have to find an **ASCII file** that is **1033** bytes in size and does not have the executable bit.
 We could check every folder manually using **ls -la**, but it is easier to narrow it down by searching 
@@ -176,6 +211,15 @@ cat ./maybehere07/.file2
 ---
 
 ## Level 7
+
+**Problem description:** 
+
+> The password for the next level is stored somewhere on the server and has all of the
+>following properties:
+>
+>    owned by user bandit7
+>    owned by group bandit6
+>    33 bytes in size
 
 **Solution:**  
 Again, we use find, but this time with more filters: 
@@ -201,6 +245,11 @@ find /* -type f -size 33c -group bandit6 -user bandit7 2>/dev/null
 ---
 
 ## Level 8
+
+**Problem description:** 
+
+> The password for the next level is stored in the file data.txt next to the word millionth
+
 
 **Solution:** 
 I’m assuming this is a pretty big file, so I start by using stat on data.txt to confirm that.
@@ -230,6 +279,12 @@ grep "millionth" data.txt
 
 ## Level 9
 
+**Problem description:** 
+
+> The password for the next level is stored in the file data.txt and is the only line of text that occurs only once
+
+
+
 **Solution:**  
 The “Helpful Reading Material” points to piping and redirection, so I’m assuming 
 they want us to pipe the text to uniq.
@@ -253,6 +308,11 @@ sort data.txt | uniq -u
 ---
 
 ## Level 10
+
+**Problem description:** 
+
+> The password for the next level is stored in the file data.txt in one of the few human-readable strings, 
+> preceded by several ‘=’ characters.
 
 **Solution:**  
 At first, I assumed data.txt was human-readable and tried using grep: 
@@ -281,6 +341,8 @@ strings data.txt | grep -w "======"
 ---
 
 ## Level 11
+
+**Problem description:** 
 
 **Solution:**  
 Like the problem states, the content of data.txt is encrypted in **Base64**.
