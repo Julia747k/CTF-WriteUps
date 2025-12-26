@@ -8,7 +8,7 @@
 
 **Problem description:**  
 Log into the game using SSH.
-![Level 0](https://github.com/Julia747k/CTF-WriteUps/tree/main/OverTheWire/Bpic/Level0.png)
+![alt text](https://github.com/Julia747k/CTF-WriteUps/tree/main/OverTheWire/Bpic/Level0.png "Level 0")
 
 **Solution:**  
 The solution to this problem is logging into the game using SSH on port **2220** with the 
