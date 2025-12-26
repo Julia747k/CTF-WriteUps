@@ -8,6 +8,7 @@
 
 **Problem description:**  
 Log into the game using SSH.
+![Level 0](OverTheWire/Bpic/Level0.png)
 
 **Solution:**  
 The solution to this problem is logging into the game using SSH on port **2220** with the 
