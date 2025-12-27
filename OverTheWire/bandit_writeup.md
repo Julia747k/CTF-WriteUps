@@ -529,9 +529,192 @@ cat /etc/bandit_pass/bandit14
 
 **Solution:**  
 
+Commands used: 
+```bash
+nc 
+```
+
+At first i thought we were just supposed to ssh intp the localhost and submit 
+the password, which was wrong 
+
+Then i tried netcat, since then if the localhost is listening i could chat with it
+and send "sumbit" the password, which worked, the command used: 
 
 ```bash
+nc localhost 30000
+```
 
+<details>
+<summary><strong>🚩 Flag:<strong></summary>
+
+`8xCjnmgoKbGLhHFAZlGE5Tmu4M2tKJQo`
+
+</details> 
+
+## Level 16
+
+**Problem description:** 
+
+> The password for the next level can be retrieved by submitting the password of the
+> current level to port 30001 on localhost using SSL/TLS encryption.
+>
+> Helpful note: Getting “DONE”, “RENEGOTIATING” or “KEYUPDATE”? Read the “CONNECTED"
+> COMMANDS” section in the manpage.
+
+
+**Solution:**  
+
+Commands used: 
+```bash
+openssl
+```
+
+Using openssl to connect to localhost at port 30001 with s_client (TLS client used to talk directly to the server) worked: 
+```bash
+openssl s_client -connect localhost:30001
+```
+
+<details>
+<summary><strong>🚩 Flag:<strong></summary>
+
+`kSkvUpMQ7lBYyCM4GBPvCvT1BfWRy0Dx`
+
+</details> 
+
+
+## Level 17
+
+**Problem description:** 
+
+>The credentials for the next level can be retrieved by submitting the password of
+>the current level to a port on localhost in the range 31000 to 32000. First find
+>out which of these ports have a server listening on them. Then find out which of
+>those speak SSL/TLS and which don’t. There is only 1 server that will give the
+>next credentials, the others will simply send back to you whatever you send to it.
+
+
+**Solution:**  
+
+Commands used: 
+```bash
+nmap
+openssl 
+s_client
+chmod 
+```
+
+The problem here is that we have a range of ports and only one will give us the 
+next credantials, to solve that we can use nmap which is a command that can be 
+used to scan ports:
+
+```bash
+nmap -sV -T4 -p 31000-32000 localhost
+```
+-T5 increases the speed of the scan 
+-p specifies the port(range) 
+-sV identifies the version of the service 
+
+
+From it we got a list of open ports:
+
+| PORT      | STATE    | SERVICE     |
+|-----------|----------|-------------|
+| 31046/tcp | open     | echo        |
+| 31518/tcp | open     | ssl/echo    |
+| 31691/tcp | open     | echo        |
+| 31790/tcp | open     | ssl/unknown |
+| 31960/tcp | open     | echo        |
+
+
+And this message: 
+
+```bash 
+1 service unrecognized despite returning data. If you know the service/version,
+please submit the following fingerprint at https://nmap.org/cgi-bin/submit.cgi?new-service :
+SF-Port31790-TCP:V=7.94SVN%T=SSL%I=7%D=12/27%Time=694FB34A%P=x86_64-pc-lin
+SF:ux-gnu%r(GenericLines,32,"Wrong!\x20Please\x20enter\x20the\x20correct\x
+SF:20current\x20password\.\n")%r(GetRequest,32,"Wrong!\x20Please\x20enter\
+SF:x20the\x20correct\x20current\x20password\.\n")%r(HTTPOptions,32,"Wrong!
+SF:\x20Please\x20enter\x20the\x20correct\x20current\x20password\.\n")%r(RT
+SF:SPRequest,32,"Wrong!\x20Please\x20enter\x20the\x20correct\x20current\x2
+SF:0password\.\n")%r(Help,32,"Wrong!\x20Please\x20enter\x20the\x20correct\
+SF:x20current\x20password\.\n")%r(FourOhFourRequest,32,"Wrong!\x20Please\x
+SF:20enter\x20the\x20correct\x20current\x20password\.\n")%r(LPDString,32,"
+SF:Wrong!\x20Please\x20enter\x20the\x20correct\x20current\x20password\.\n"
+SF:)%r(SIPOptions,32,"Wrong!\x20Please\x20enter\x20the\x20correct\x20curre
+SF:nt\x20password\.\n");
+```
+From which we can see that port 31790 is asking for the a password `Wrong!\x20Please\x20enter\x20the\x20correct\x SF:20current\x20password\.\n`
+which seems promising, firsty only using openssl like we did in the last level
+didnt work, i just got `KEYUPDATE`. By reaserching s_client i realised that without using `-quiet` the server reads all the extre bytes and becouse of that the password comparison failes.  
+
+By using 
+
+```bash
+openssl s_client -connect localhost:31790 -quiet
+```
+
+and the flag from last level. We recieve a RSA key that we now can save on the 
+local system, change privileges to 400 by using chmod, so that ssh accepts it, we 
+can ssh into level 18.
+
+
+<details>
+<summary><strong>🚩 Flag:<strong></summary>
+
+Not really a flag haha! 
+
+```
+ssh -i sshkey.private -p 2220 bandit17@bandit.labs.overthewire.org
+```
+
+</details> 
+
+## Level 18 
+*Problem description:** 
+
+> There are 2 files in the homedirectory: passwords.old and passwords.new. The 
+> password for the next level is in passwords.new and is the only line that has 
+> been changed between passwords.old and passwords.new
+
+
+**Solution:**  
+
+Commands used: 
+```bash
+ls
+diff 
+```
+
+This one is pretty simple, by using diff which is a command used to compare the 
+contents of two text files or directories line by line where `<` states the line 
+from the first file and `>` shows how its different in the second file
+
+```bash
+diff passwords.old passwords.new
+```
+
+<details>
+<summary><strong>🚩 Flag:<strong></summary>
+
+`x2gLTTjFwMOhQ8oWNbMN362QKxfRqGlO`
+
+</details> 
+
+## Level 19
+
+**Problem description:** 
+
+>
+
+**Solution:**  
+
+Commands used: 
+```bash
+
+```
+
+```bash
 ```
 
 <details>
