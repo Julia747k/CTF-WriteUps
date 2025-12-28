@@ -535,7 +535,7 @@ nc
 ```
 
 At first i thought we were just supposed to ssh intp the localhost and submit 
-the password, which was wrong 
+the password, which was wrong.
 
 Then i tried netcat, since then if the localhost is listening i could chat with it
 and send "sumbit" the password, which worked, the command used: 
@@ -705,7 +705,117 @@ diff passwords.old passwords.new
 
 **Problem description:** 
 
->
+> The password for the next level is stored in a file readme in the homedirectory.
+> Unfortunately, someone has modified .bashrc to log you out when you log in with
+> SSH.
+
+
+
+**Solution:**  
+
+Commands used: 
+
+```bash
+ssh 
+cat
+```
+
+To avoid triggering .bashrc we can run a the cat command directly: 
+
+```bash
+ssh -p 2220 bandit18@bandit.labs.overthewire.org cat readme
+```
+
+<details>
+<summary><strong>🚩 Flag:<strong></summary>
+
+`cGWpMaKXVwDUNgPAVJbWYuGHVn9zl3j8`
+
+</details> 
+
+
+## Level 20
+
+**Problem description:** 
+
+> To gain access to the next level, you should use the setuid binary in the
+> homedirectory. Execute it without arguments to find out how to use it. The password
+> for this level can be found in the usual place (/etc/bandit_pass), after you have
+> used the setuid binary.
+
+
+**Solution:**  
+
+Commands used: 
+```bash
+cat
+```
+
+The setuid binary `bandit20-do ` has the owner sat at bandit20 which means that 
+the code in the seuid binary will be executed as the bandit20, after testing different 
+commands as atributes, it seems like there is a permission to use the cat command,
+by using it the password was read from the /etc/bandit_pass/bandit20 file
+
+```bash
+./bandit20-do cat /etc/bandit_pass/bandit20
+```
+
+<details>
+<summary><strong>🚩 Flag:<strong></summary>
+
+`0qXahG8ZjOVMN9Ghs7iOWsCfZyXOUbYO`
+
+</details> 
+
+## Level 20
+
+**Problem description:** 
+
+> There is a setuid binary in the homedirectory that does the following: it 
+> makes a connection to localhost on the port you specify as a commandline argument. 
+> It then reads a line of text from the connection and compares it to the password 
+> in the previous level (bandit20). If the password is correct, it will transmit 
+> the password for the next level (bandit21).
+
+
+**Solution:**  
+
+Commands used: 
+```bash
+tmux 
+nc
+```
+
+Started tmux on in the bandit20 container, used nc to listen to a port on 
+localhost:
+
+```bash
+nc -l localhost 2000
+```
+Then usted % to vertically split it, in one terminal i used the provided script
+on port 2000:
+
+```bash
+./suconnect 2000
+```
+
+Then just sent over the privious flag from the first tmux, and got back the flag.
+
+<details>
+<summary><strong>🚩 Flag:<strong></summary>
+
+`EeoULMCra2q0dSkYj561DX7s1CpBuOBt`
+
+</details> 
+
+## Level 21
+
+**Problem description:** 
+
+> A program is running automatically at regular intervals from cron, the time-based 
+> job scheduler. Look in /etc/cron.d/ for the configuration and see what command is 
+> being executed.
+
 
 **Solution:**  
 
@@ -714,12 +824,22 @@ Commands used:
 
 ```
 
+
+```bash
+
+```
+```bash
+
+```
+
+
 ```bash
 ```
+
 
 <details>
 <summary><strong>🚩 Flag:<strong></summary>
 
-``
+`EeoULMCra2q0dSkYj561DX7s1CpBuOBt`
 
 </details> 
