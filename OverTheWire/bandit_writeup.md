@@ -671,6 +671,7 @@ ssh -i sshkey.private -p 2220 bandit17@bandit.labs.overthewire.org
 </details> 
 
 ## Level 18 
+
 **Problem description:** 
 
 > There are 2 files in the homedirectory: passwords.old and passwords.new. The 
@@ -686,9 +687,8 @@ ls
 diff 
 ```
 
-This one is pretty simple, by using diff which is a command used to compare the 
-contents of two text files or directories line by line where `<` states the line 
-from the first file and `>` shows how its different in the second file
+This level is straightforward. The diff command compares the contents of two text
+files line by line. Lines marked with `<` come from the first file, while lines marked with `>` show how they differ in the second file.
 
 ```bash
 diff passwords.old passwords.new
@@ -720,7 +720,8 @@ ssh
 cat
 ```
 
-To avoid triggering .bashrc we can run a the cat command directly: 
+To avoid triggering .bashrc, run the cat command directly over SSH instead of
+starting an interactive shell:
 
 ```bash
 ssh -p 2220 bandit18@bandit.labs.overthewire.org cat readme
@@ -751,10 +752,11 @@ Commands used:
 cat
 ```
 
-The setuid binary `bandit20-do ` has the owner sat at bandit20 which means that 
-the code in the seuid binary will be executed as the bandit20, after testing different 
-commands as atributes, it seems like there is a permission to use the cat command,
-by using it the password was read from the /etc/bandit_pass/bandit20 file
+The setuid binary `bandit20-do` has the owner set to bandit20, which means the code
+inside the setuid binary is executed with bandit20 privileges. After testing
+different commands as arguments, it appears that permission is granted to use the
+cat command. Using it allows reading the password from the
+/etc/bandit_pass/bandit20 file
 
 ```bash
 ./bandit20-do cat /etc/bandit_pass/bandit20
@@ -780,26 +782,37 @@ by using it the password was read from the /etc/bandit_pass/bandit20 file
 
 **Solution:**  
 
+The key detail is that the binary works as a client, so a listener must be run 
+first. 
+
 Commands used: 
 ```bash
 tmux 
 nc
 ```
 
-Started tmux on in the bandit20 container, used nc to listen to a port on 
-localhost:
+`tmux` is used to handle both sides of the connection, then CTRL+b % to split
+it into planes.
+
+
+```bash 
+tmux
+``` 
+
+In the first pane, start a listener on a local port: 
 
 ```bash
 nc -l localhost 2000
 ```
-Then usted % to vertically split it, in one terminal i used the provided script
-on port 2000:
+
+In the second pane, execute the setuid binary and point it at that port:
 
 ```bash
 ./suconnect 2000
 ```
 
-Then just sent over the privious flag from the first tmux, and got back the flag.
+Once the connection is made, send the bandit20 password through the nc listener.
+If correct, the binary responds with the password for the next level.
 
 <details>
 <summary><strong>🚩 Flag:<strong></summary>
@@ -828,13 +841,7 @@ Commands used:
 ```bash
 
 ```
-```bash
 
-```
-
-
-```bash
-```
 
 
 <details>
