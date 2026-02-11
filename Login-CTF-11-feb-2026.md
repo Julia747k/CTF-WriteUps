@@ -6,7 +6,13 @@
 Its most likely base64-decoded not base64-encoded.
 Those hex bytes, when base64-encoded turn into: 
 
-CTFkom{dec0d1ng_in5te4d_0f_enc0d1ng}
+<details>
+<summary><strong>🚩 Flag:<strong></summary>
+
+`CTFkom{dec0d1ng_in5te4d_0f_enc0d1ng}`
+
+</details>
+
 
 
 ## base4? 
@@ -16,12 +22,14 @@ CTFkom{dec0d1ng_in5te4d_0f_enc0d1ng}
 The challenge title (“base4?”) and the fact that the weird message only contained four distinct letters — s, e, a, l — immediately suggested some kind of base-4 encoding.
 Since there are exactly four unique characters, I mapped them to base-4 digits. 
 The order “seal” which is a strong hint for the digit ordering. So I assigned
+´´´
 s = 0
 e = 1
 a = 2
 l = 3
+´´´
 
-Next, because base-4 digits can represent binary data I grouped the encoded string into chunks of 4 characters. 
+Next because base-4 digits can represent binary data I grouped the encoded string into chunks of 4 characters. 
 Four base-4 digits represent values from 0–255 (since 4⁴ = 256), which matches the range of one ASCII byte.
 For each 4-character block:
 
@@ -30,8 +38,14 @@ For each 4-character block:
 3. Convert it to decimal.
    
 Translate the decimal value to its ASCII character.
-Doing this for the entire string give us the flag: 
+Doing this for the entire string give us the flag. 
 
+<details>
+<summary><strong>🚩 Flag:<strong></summary>
+
+`CTFkom{b4s564_no_b4s3_s34l_y3s!!!}`
+
+</details>
 
 
 
