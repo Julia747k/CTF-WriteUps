@@ -3,8 +3,8 @@
 
 <img width="472" height="322" alt="image" src="https://github.com/user-attachments/assets/c86328b8-1a07-4b4a-a297-6b94901593d7" />
 
-Its most likely base64-decoded not base64-encoded.
-Those hex bytes, when base64-encoded turn into: 
+Its most likely base64 decoded not base64-encoded.
+Those hex bytes when base64 encoded turn into: 
 
 <details>
 <summary><strong>🚩 Flag:<strong></summary>
