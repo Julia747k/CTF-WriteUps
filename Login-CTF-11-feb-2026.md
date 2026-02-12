@@ -37,10 +37,10 @@ Because base-4 digits can represent binary data I grouped the encoded string int
 Four base-4 digits represent values from $0–255$ (since $4⁴ = 256$ ), which matches the range of one ASCII byte.
 For each 4 characters: 
 
-1. I convert the letters to base-4 digits
-2. Interpret that as a base-4 number
-3. Convert it to decimal
-4. Translate the decimal value to its ASCII character
+1. I converted the letters to base-4 digits
+2. Interpreted that as a base-4 number
+3. Converted it to decimal
+4. Translated the decimal value to its ASCII character
    
 Doing this for the entire string give us the flag. 
 
