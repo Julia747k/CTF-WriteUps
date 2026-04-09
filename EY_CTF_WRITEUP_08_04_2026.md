@@ -1,0 +1,150 @@
+# EY CTF hosted at NTNU in Gjøvik 08.04.2026
+
+
+
+## Never gonne give you up (Web, Easy)
+<img width="494" height="433" alt="image" src="https://github.com/user-attachments/assets/6e7ecd12-bf7c-45be-b568-8043e36d95cf" />
+
+
+When I opened the challenge website, it showed a message saying I would be redirected to the flag “for a short while,” but I couldn’t actually see any flag. The page also made it difficult to use browser developer tools, so I suspected something was being hidden or handled client-side.
+
+<img width="705" height="298" alt="image" src="https://github.com/user-attachments/assets/21a4e812-7e52-491a-8869-03e7cec1095b" />
+
+Since inspecting through the browser wasn’t working, I switched to using `curl` to look at the raw HTTP response.
+
+### Step 1: Inspecting with curl
+
+I ran:
+
+```bash 
+curl -i https://jslove.ctf.eysnc.no
+```
+
+This returned the headers and the page source. In the response, I found:
+
+<img width="894" height="280" alt="image" src="https://github.com/user-attachments/assets/2572dfe8-6db3-4b87-848e-9b8d67a7ba72" />
+
+This showed that the page automatically submits a form using JavaScript with the method is POST. That suggested the flag might only be returned when making a POST request.
+
+### Step 2: Sending a POST request
+
+I then tried:
+
+```bash
+curl -i -X POST https://jslove.ctf.eysnc.no
+```
+
+
+This returned a different response. The headers included a redirect to a YouTube video (a Rickroll), but the important part was in the body:
+
+<img width="971" height="233" alt="image" src="https://github.com/user-attachments/assets/92fe7d07-78c0-41b4-8811-1affafa4ec0f" />
+
+
+<details>
+<summary><strong>🚩 Flag:<strong></summary>
+
+`EY{r3dir3c7s_g0_z000000m!}`
+
+</details>
+
+
+
+## Insecure login (Web)
+<img width="527" height="480" alt="image" src="https://github.com/user-attachments/assets/2533de79-38cd-425e-956e-32e67aea3fec" />
+
+
+The challenge presented a login page that only required a password.
+
+I inspected the page source and found some JavaScript handling the authentication:
+<img width="471" height="140" alt="image" src="https://github.com/user-attachments/assets/a227cc37-1cd4-44af-bc26-2352c2cbf07e" />
+
+### Step 1: Crack the hash 
+This showed that the password was being hashed with SHA1 and compared to a fixed hash.
+I copied the hash and then used hashcat with the rockyou.txt wordlist:
+
+````bash
+hashcat -m 100 456c29fb98f3bce0f7222dd42bcbfc988e6dcf3f rockyou.txt
+````
+
+<img width="569" height="75" alt="image" src="https://github.com/user-attachments/assets/c6761e52-fa02-4de4-bd31-04a7d67d71c4" />
+
+This gave the password:
+`oneal32`
+
+### Step 2: Login
+Using this password on the login page revealed the flag.
+
+
+<details>
+<summary><strong>🚩 Flag:<strong></summary>
+
+`EY{d0nt_k3ep_5ecre7s_c1i3nt_5id3`
+
+</details>
+
+
+
+# Boyband (Web) 
+<img width="497" height="440" alt="image" src="https://github.com/user-attachments/assets/b0f57b9f-08f8-4f64-a6e9-4353b08dd81b" />
+
+This challenge was a voting website where you could vote for your favorite boyband, and you had to get 10000 votes for it win, but you could only give 5 votes at a time. 
+<img width="743" height="218" alt="image" src="https://github.com/user-attachments/assets/4973464b-3eae-49d6-bfb2-0e9fdf94bf71" />
+
+
+### Step 1: Intercept the request
+I used Burp Suite to intercept the request when submitting a vote. The request looked like this:
+<img width="554" height="422" alt="image" src="https://github.com/user-attachments/assets/dc062c71-81e2-431a-b780-81a96ff83123" />
+
+I noticed that the vote parameter was sent in plain text and not validated properly.
+
+### Step 2: Modify the vote
+Since the vote value was controllable, I changed it from `vote=5` to `vote=10000`. Then forwarded the modified request.
+
+### Step 3: Get the flag
+After sending the modified request the page responded with:
+<img width="745" height="447" alt="image" src="https://github.com/user-attachments/assets/4a276276-e812-4b8f-87bf-0501d7d379bf" />
+
+
+<details>
+<summary><strong>🚩 Flag:<strong></summary>
+
+`EY{m4yb3_v4l1d4t3_0n_th3_s3rv3rs1d3_4s_w3ll_n3xt_t1m3}`
+
+</details>
+
+
+
+## Homework (Web)
+
+This challenge hinted that the input was processed in LaTeX and that the flag was stored at `/flag.txt`.
+
+### Step 1: Identify LaTeX injection
+
+The form required answers in LaTeX format. Since LaTeX was being rendered server-side. I tried injecting a LaTeX command to read files.
+
+In the first answer field I entered:
+
+```latex
+\input{/flag.txt}
+```
+
+
+<img width="356" height="404" alt="image" src="https://github.com/user-attachments/assets/fbc8074c-0a81-4cc6-8833-c6192acffb70" />
+
+The rest of the answers were filled in normally so the form would still process correctly.
+
+
+<img width="821" height="755" alt="image" src="https://github.com/user-attachments/assets/9dc65c22-e98a-4c31-9327-eb1842550130" />
+
+After submitting, the PDF generation failed but the error output was shown on the page.
+In the error log, I could see the contents of /flag.txt which included the flag.
+
+
+<details>
+<summary><strong>🚩 Flag:<strong></summary>
+  
+EY{h0m3w0rk_sh3ll_3sc4p3_1n_l4t3x}
+
+</details>
+
+
